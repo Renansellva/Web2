@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Cadastrar Brinquedo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <div class="card-container">
+            
+            <div class="card-header">
+                <h2>🎈 Sistema Pula-Pula</h2>
+                <p>Cadastro de Novos Brinquedos para Locação</p>
+            </div>
+            
+            <form id="formProduto" class="card-form">
+                
+                <div class="form-group">
+                    <label for="nome">Nome do Brinquedo</label>
+                    <input type="text" id="nome" required placeholder="Ex: Castelinho Inflável Premium">
+                </div>
+                
+                <div class="form-group">
+                    <label for="descricao">Descrição / Detalhes Técnicos</label>
+                    <textarea id="descricao" rows="4" placeholder="Ex: Dimensões 3x3m, voltagem 220v, suporta até 100kg..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="preco">Preço da Locação (por hora)</label>
+                    <div class="price-input-wrapper">
+                        <span class="currency-prefix">R$</span>
+                        <input type="number" id="preco" step="0.01" required placeholder="0,00">
+                    </div>
+                </div>
+                
+                <button type="submit" id="btnSalvar" class="btn-submit">
+                    <span>Gravar Brinquedo</span>
+                </button>
+            </form>
+
+            <div id="mensagem" class="feedback-message hidden"></div>
+            
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

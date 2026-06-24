@@ -1,43 +1,27 @@
-const User = require('../models/User');
+const pool = require('../config/database');
 const bcrypt = require('bcryptjs');
 
 module.exports = {
-  // C - CREATE (Cadastrar Usuário)
   async criar(req, res) {
     const { nome, email, senha } = req.body;
     try {
       const salt = await bcrypt.genSalt(10);
       const senhaCriptografada = await bcrypt.hash(senha, salt);
 
-      const novoUsuario = await User.create({
-        nome,
-        email,
-        senha: senhaCriptografada
-      });
+      const query = 'INSERT INTO users (nome, email, senha) VALUES ($1, $2, $3) RETURNING id, nome, email, created_at';
+      const values = [nome, email, senhaCriptografada];
       
-      return res.status(201).json({
-        id: novoUsuario.id,
-        nome: novoUsuario.nome,
-        email: novoUsuario.email,
-        createdAt: novoUsuario.createdAt
-      });
+      const resultado = await pool.query(query, values);
+      return res.status(201).json(resultado.rows[0]);
     } catch (error) {
-      if (error.name === 'SequelizeUniqueConstraintError') {
-        return res.status(400).json({ erro: '❌ Este e-mail já está cadastrado!' });
-      }
       return res.status(400).json({ erro: error.message });
     }
   },
 
-  // R - READ (Puxar/Listar todos os usuários cadastrados)
   async listar(req, res) {
     try {
-      // Busca todos os usuários do banco, mas esconde a senha (attributes) por segurança!
-      const usuarios = await User.findAll({
-        attributes: ['id', 'nome', 'email', 'createdAt']
-      });
-      
-      return res.json(usuarios);
+      const resultado = await pool.query('SELECT id, nome, email, created_at FROM users');
+      return res.json(resultado.rows);
     } catch (error) {
       return res.status(500).json({ erro: error.message });
     }
